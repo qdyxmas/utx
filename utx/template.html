@@ -6968,6 +6968,8 @@
             <div class="ibox float-e-margins">
                 <div class="ibox-title">
                     <h5>报告汇总</h5>
+					<h5><a href="./coverage/index.html">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;覆盖率详情</a>
+					</h5>
                     <div class="ibox-tools">
                         <a class="collapse-link">
                             <i class="fa fa-chevron-up"></i>
@@ -6982,7 +6984,7 @@
                         <div class="col-sm-6 b-r" style="height:350px">
                             <form class="form-horizontal">
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label text-navy">用例名称:</label>
+                                    <label class="col-sm-2 control-label text-navy">测试人员:</label>
                                     <div class="col-sm-5">
                                         <span class="form-control" id="testName"></span>
                                     </div>
@@ -7012,9 +7014,9 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label text-navy">开始时间:</label>
+                                    <label class="col-sm-2 control-label text-danger">用例错误:</label>
                                     <div class="col-sm-5">
-                                        <span class="form-control" id="beginTime"></span>
+                                        <span class="form-control text-danger" id="beginTime"></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
@@ -7061,7 +7063,7 @@
                                 name="filterResult" id="filterResult">
                             <option id="filterResultOption" value="">----------</option>
                         </select>
-                        <div style="width: 20%; float: right">
+                        <div style="width: 25%; float: right">
                             <label class="form-control">
                                 <span class="text-navy">用例数: </span><span class="text-navy b-r"
                                                                           id="filterAll">3</span><span> | </span>
@@ -7070,7 +7072,9 @@
                                 <span class="text-danger">失败: </span><span class="text-danger"
                                                                            id="filterFail">3</span><span> | </span>
                                 <span class="text-warning">跳过: </span><span class="text-warning"
-                                                                            id="filterSkip">3</span>
+                                                                            id="filterSkip">3</span><span> | </span>
+                                <span class="text-danger">错误: </span><span class="text-danger"
+                                                                            id="filterError">3</span>
                             </label>
                         </div>
                     </div>
@@ -7128,8 +7132,9 @@
         $("#testFail").text(resultData["testFail"]);
         $("#testSkip").text(resultData["testSkip"]);
         $("#testAll").text(resultData["testAll"]);
-        $("#beginTime").text(resultData["beginTime"]);
+        $("#beginTime").text(resultData["testError"]);
         $("#totalTime").text(resultData["totalTime"]);
+        $("#testerName").text(resultData["testerName"]);
         var classNames = [];
         var results = [];
         $.each(resultData["testResult"], function (i, n) {
@@ -7159,6 +7164,7 @@
             var filterOk = 0;
             var filterFail = 0;
             var filterSkip = 0;
+            var filterError = 0;
 
             $.each(resultData["testResult"], function (i, n) {
                 if ((className === "" || n["className"] === className) && (caseResult === "" || n["status"] === caseResult)) {
@@ -7174,6 +7180,7 @@
                         filterSkip += 1;
                         status = "<td><span class='text-warning'>跳过</span></td>";
                     } else {
+						filterError += 1;
                         status = "<td><span class='text-danger'>" + n["status"] + "！！！</span></td>";
                         error_case_flag = true;
                     }
@@ -7200,18 +7207,12 @@
             $("#filterOk").text(filterOk);
             $("#filterFail").text(filterFail);
             $("#filterSkip").text(filterSkip);
+            $("#filterError").text(filterError);
 
 
         }
 
         generateResult("", "");
-        $("#error_case").hide();
-        if (error_case_flag) {
-            var className = $("#filterClass").val();
-            var caseResult = "错误";
-            $("#error_case").show();
-            generateResult(className, caseResult);
-        }
         $("#filterClass").on('change', function () {
             var className = $("#filterClass").val();
             var caseResult = $("#filterResult").val();
@@ -7242,7 +7243,7 @@
                 legend: {
                     orient: 'vertical',
                     left: 'left',
-                    data: ['失败', '跳过', '成功']
+                    data: ['失败', '跳过', '成功','错误']
                 },
                 series: [
                     {
@@ -7253,7 +7254,8 @@
                         data: [
                             {value: resultData["testFail"], name: '失败'},
                             {value: resultData["testSkip"], name: '跳过'},
-                            {value: resultData["testPass"], name: '成功'}
+                            {value: resultData["testPass"], name: '成功'},
+                            {value: resultData["testError"], name: '错误'}
                         ],
                         itemStyle: {
                             emphasis: {
