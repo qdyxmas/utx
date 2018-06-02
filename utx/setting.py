@@ -15,7 +15,7 @@ class setting:
     sort_case = True
 
     # 每个用例的执行间隔，单位是秒
-    execute_interval = 0.1
+    execute_interval = 0
 
     # 开启检测用例描述
     check_case_doc = True
@@ -24,7 +24,7 @@ class setting:
     full_case_name = False
 
     # 测试报告显示的用例名字最大程度
-    max_case_name_len = 80
+    max_case_name_len = 800
 
     # 执行用例的时候，显示报错信息
     show_error_traceback = True
@@ -33,4 +33,4 @@ class setting:
     create_ztest_style_report = True
 
     # 生成bstest风格的报告
-    create_bstest_style_report = True
+    create_bstest_style_report = False
