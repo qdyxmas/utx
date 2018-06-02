@@ -459,14 +459,13 @@ class _TestResult(unittest.TestResult):
 
 
 class BSTestRunner(Template_mixin):
-    def __init__(self, report_title, report_dir, verbosity=1, description=""):
+    def __init__(self, report_title, report_dir, verbosity=1, description="",**kargs):
         self.report_dir = report_dir
         self.verbosity = verbosity
         self.title = report_title
         self.description = description
         self.start_time = datetime.datetime.now()
         self.stop_time = None
-
     def run(self, test):
         log.info("开始进行测试")
         result = _TestResult(self.verbosity)
@@ -476,7 +475,7 @@ class BSTestRunner(Template_mixin):
         log.info('Time Elapsed: {}'.format(self.stop_time - self.start_time))
 
         if setting.create_ztest_style_report:
-            file = os.path.join(self.report_dir, r"{}-ztest.html".format(self.start_time.strftime("%Y-%m-%d-%H-%M-%S")))
+            file = os.path.join(self.report_dir, r"{}-unittest.html".format(self.start_time.strftime("%Y-%m-%d-%H-%M-%S")))
             shutil.copy2(os.path.join(os.path.dirname(__file__), "template.html"), file)
             with open(file, "r+", encoding='utf-8') as f:
                 content = f.read().replace(r"${resultData}", json.dumps(result_data, ensure_ascii=False, indent=4))
@@ -606,6 +605,7 @@ class BSTestRunner(Template_mixin):
         result_data["testAll"] = result.success_count + result.failure_count + result.error_count + result.skip_count
         result_data["testFail"] = result.failure_count
         result_data["testSkip"] = result.skip_count
+        result_data["testError"] = result.error_count
 
         return report
 
