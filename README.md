@@ -8,6 +8,7 @@
 	拷贝testrun.py到后台的根目录下
 	cp testrun.py xxxx/backend
 	cd xxxx/backend
-	python3 testrun.py
+	#python3 testrun.py
+	python testrun.py  --report=web_root_dir/report
 ## 日志查看 ##
 	运行完成后在当前创建一个report目录，每次运行结果在report/时间戳目录下
