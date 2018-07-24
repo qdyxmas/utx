@@ -13,7 +13,7 @@ print("rootdir=",rootdir)
 if __name__ == '__main__':
     kargs =  {'testName':'qdy@xkool.xyz','rootdir':rootdir,'report':'/var/www/html/report'}
     try:
-        options,args = getopt.getopt(sys.argv[1:],"h:",["user=",'rootdir=','report'])
+        options,args = getopt.getopt(sys.argv[1:],"h:",["user=",'rootdir=','report='])
     except getopt.GetoptError:
         print('error')
         sys.exit()
