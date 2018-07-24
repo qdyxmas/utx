@@ -13,6 +13,7 @@ class TestRunner():
         self.case_dirs = []
         if not kargs:
             self.reserved['testName'] = 'qudeyong'
+            self.reserved['report'] = '/var/www/html/report'
         else:
             self.reserved = kargs
         self.start_time=datetime.datetime.now()
@@ -40,10 +41,10 @@ class TestRunner():
         if not self.case_dirs:
             raise Exception("请先调用add_case_dir方法，添加测试用例文件夹")
 
-        if not os.path.exists("report"):
-            os.mkdir("report")
+        if not os.path.exists(self.reserved['report']):
+            os.mkdir(self.reserved['report'])
         dirname = '{}'.format(self.start_time.strftime("%Y-%m-%d-%H-%M-%S"))
-        report_dir = os.path.abspath("report/"+dirname)
+        report_dir = os.path.abspath(self.reserved['report']+'/'+dirname)
         os.mkdir(report_dir)
         os.mkdir(report_dir+'/coverage')
         suite = unittest.TestSuite()
@@ -58,6 +59,6 @@ class TestRunner():
         cov.stop()
         cov.save()
         cov.html_report(directory=report_dir+'/coverage')
-        os.system("tar -zcvf test_result.tar.gz ./*")
-        fzip = report_dir+'/test_report.zip'
+        #os.system("tar -zcvf test_result.tar.gz ./*")
+        #fzip = report_dir+'/test_report.zip'
         #os.system('sz test_result.tar.gz')
