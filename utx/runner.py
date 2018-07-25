@@ -8,15 +8,15 @@ from utx.BSTestRunner import BSTestRunner
 import coverage
 
 class TestRunner():
-
     def __init__(self,**kargs):
         self.case_dirs = []
         if not kargs:
             self.reserved['testName'] = 'qudeyong'
             self.reserved['report'] = '/var/www/html/report'
+            self.reserved['dirname'] = ''
         else:
             self.reserved = kargs
-        self.start_time=datetime.datetime.now()
+        # self.start_time=datetime.datetime.now()
     def add_case_dir(self, dir_path):
         """添加测试用例文件夹，多次调用可以添加多个文件夹，会按照文件夹的添加顺序执行用例
 
@@ -43,7 +43,8 @@ class TestRunner():
 
         if not os.path.exists(self.reserved['report']):
             os.mkdir(self.reserved['report'])
-        dirname = '{}'.format(self.start_time.strftime("%Y-%m-%d-%H-%M-%S"))
+        
+        dirname = '{}'.format(self.reserved['dirname'])
         report_dir = os.path.abspath(self.reserved['report']+'/'+dirname)
         os.mkdir(report_dir)
         os.mkdir(report_dir+'/coverage')
